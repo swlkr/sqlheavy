@@ -9,17 +9,17 @@
   (if (null? v) "null" (string ":" k)))
 
 
-(defn null-or-param [[k v]]
-  (string k " = " (null-or-column [k v])))
+(defn null-or-param [join [k v]]
+  (string k " " join " " (null-or-column [k v])))
 
 
-(defn params-string [sep prs]
+(defn params-string [join sep prs]
   (as-> prs ?
-        (map null-or-param ?)
+        (map (partial null-or-param join) ?)
         (string/join ? sep)))
 
-(def where-string (partial params-string " and "))
-(def set-string (partial params-string ","))
+(def where-string (partial params-string "is" " and "))
+(def set-string (partial params-string "=" ","))
 
 
 (defn insert [table-name pairs]
